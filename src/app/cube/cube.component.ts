@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -25,6 +25,36 @@ export class CubeComponent implements AfterViewInit {
 
 
 
+  /* CUBE PROPERTIES */
+  @Input()
+  public rotationSpeedX: number = 0.005;
+
+  @Input()
+  public rotationSpeedY: number = 0.01;
+
+  @Input()
+  public size: number = 200;
+
+  @Input()
+  public texture: string = '/assets/textures/crate.gif';
+
+
+
+  /* STAGE PROPERTIES */
+  @Input()
+  public cameraZ: number = 400;
+
+  @Input()
+  public fieldOfView: number = 70;
+
+  @Input('nearClipping')
+  public nearClippingPane: number = 1;
+
+  @Input('farClipping')
+  public farClippingPane: number = 1000;
+
+
+
   /* DEPENDENCY INJECTION (CONSTRUCTOR) */
   constructor() { }
 
@@ -36,22 +66,18 @@ export class CubeComponent implements AfterViewInit {
    * Animate the cube
    */
   private animateCube() {
-    // TODO: Convert rotation parameters to Inputs
-    this.cube.rotation.x += 0.005;
-    this.cube.rotation.y += 0.01;
+    this.cube.rotation.x += this.rotationSpeedX;
+    this.cube.rotation.y += this.rotationSpeedY;
   }
 
   /**
    * Create the cube
    */
   private createCube() {
-    // TODO: Convert texture path to Input
-    let texture = new THREE.TextureLoader()
-      .load('../../assets/textures/crate.gif');
+    let texture = new THREE.TextureLoader().load(this.texture);
     let material = new THREE.MeshBasicMaterial({ map: texture });
     
-    // TODO: Convert parameters to Inputs
-    let geometry = new THREE.BoxBufferGeometry(200, 200, 200);
+    let geometry = new THREE.BoxBufferGeometry(this.size, this.size, this.size);
     this.cube = new THREE.Mesh(geometry, material);
 
     // Add cube to scene
@@ -66,19 +92,14 @@ export class CubeComponent implements AfterViewInit {
     this.scene = new THREE.Scene();
 
     /* Camera */
-    // TODO: Convert parameters to Inputs
-    let fieldOfView = 70;
     let aspectRatio = this.getAspectRatio();
-    let nearClippingPane = 1;
-    let farClippingPane = 1000;
     this.camera = new THREE.PerspectiveCamera(
-      fieldOfView,
+      this.fieldOfView,
       aspectRatio,
-      nearClippingPane,
-      farClippingPane
+      this.nearClippingPane,
+      this.farClippingPane
     );
-    // Move camera to coordinates (0,0,400)
-    this.camera.position.z = 400;
+    this.camera.position.z = this.cameraZ;
   }
 
   private getAspectRatio() {
