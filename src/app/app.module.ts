@@ -5,11 +5,13 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { CubeComponent } from './cube/cube.component';
+import { PanoramaEquirectangularComponent } from './panorama-equirectangular/panorama-equirectangular.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CubeComponent
+    CubeComponent,
+    PanoramaEquirectangularComponent
   ],
   imports: [
     BrowserModule,
